@@ -22,3 +22,6 @@ Quick list of commands:
 
 > ftlps list
 * lists the saves locally stored in the saves folder
+
+You should be able to hot-swap the saves with the game still running as long as you exit to the menu before
+switching saves, if I were less lazy I might integrate it into that menu and have it be a real mod of the game.
