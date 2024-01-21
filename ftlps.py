@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 
 import os
 import subprocess
@@ -114,41 +115,40 @@ def drawNebula():
     print("\n")
     
 def help(args):
-
-    drawNebula();
+    
+    if(ensureSavesFolderExists()):
+        drawNebula();
     # Instructions for different commands go here
-    print(
-"""
-List of commands
-
-command format: ProfileSaver {command name} {command arguments}
-
--------------------------------------------------------
-
-help:
+    
+    runname = os.path.basename(__file__).split(".")[0];
+    
+    commandList = [
+    f"""
+{runname} help:
     Displays nebula ascii and this manual.
-
--------------------------------------------------------
-
-save {name}:
+    """,
+    f"""
+{runname} save [name]:
     Saves the current progress to the name specified. 
-
--------------------------------------------------------
-
-load {name}:
+    """,
+    f"""
+{runname} load [name]:
     Loads the save with given name, if it doesn't exist
     it lists the ones that do (same as list) and does
     nothing else.
-    
--------------------------------------------------------
-
-list:
+    """,
+    f"""
+{runname} list:
     Lists the saves locally stored in specified folder.
+    """,
+    f"""
+{runname} run:
+    Runs the game.
+    """
+    ]
     
--------------------------------------------------------
-
- """
-    )
+    for command in commandList:
+        print(command)
     return 0;
     
 def ensureSavesFolderExists():
@@ -158,11 +158,14 @@ def ensureSavesFolderExists():
             # Create the folder if it doesn't exist
             os.makedirs(savesPath)
             print(f"Folder '{savesPath}' created.")
+            return True
         except OSError as e:
             print(f"Error creating folder '{savesPath}': {e}")
+    return False
 
 def save(args):
-
+    if(ensureSavesFolderExists()):
+        drawNebula();
     savefileAe_prof = args.name + "." + aeSave
     savefileContinue = args.name + "." + contSave
     
@@ -224,15 +227,13 @@ def list(args):
     
     return;
 
-def start(args):
+def run(args):
     subprocess.run(["start", "cmd", "/c", f"start steam://run/212680"], shell=True)
 
 def main():
     parser = argparse.ArgumentParser(description='Profile saver for Faster Than Light')
     subparsers = parser.add_subparsers(title='commands', dest='command')
     
-    ensureSavesFolderExists()
-
     # Define commands here
     parserHelp = subparsers.add_parser('help', help='Displays nebula ascii and manual.')
     parserHelp.set_defaults(func=help)
@@ -253,8 +254,8 @@ nothing else.
     parserList = subparsers.add_parser('list', help='Lists the saves locally stored in specified folder. ')
     parserList.set_defaults(func=list)
     
-    parserStart = subparsers.add_parser('start', help='Starts the game through steam api.')
-    parserStart.set_defaults(func=start)
+    parserStart = subparsers.add_parser('run', help='Starts the game through steam api.')
+    parserStart.set_defaults(func=run)
 
 
     args = parser.parse_args()
