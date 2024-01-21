@@ -1,5 +1,5 @@
-# FTL-Profile-Saver
-A save program for the Faster Than Light video game.
+# FTL Nebula Profile Saver
+A save script for the video game Faster Than Light.
 
 I made this because I wanted it. 
 
